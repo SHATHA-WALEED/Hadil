@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Hadil ♡ — A Little Corner of the Internet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Quicksand:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   A LITTLE CORNER OF THE INTERNET THAT BELONGS TO YOU
+   ------------------------------------------------------------
+   HOW TO CUSTOMIZE (search for these markers):
+   [EDIT-LOVE]      → things you love about her
+   [EDIT-TIMELINE]  → your friendship moments
+   [EDIT-FORGET]    → "if you ever forget" messages
+   [EDIT-SONGS]     → your soundtrack (titles + links)
+   [EDIT-STARS]     → tiny star messages (in the JS at bottom)
+   [EDIT-OPENWHEN]  → "open when..." letters (in the JS at bottom)
+   ============================================================ */
+
+:root{
+  --night-1:#0b0b2a;
+  --night-2:#1a1440;
+  --night-3:#2b1b5e;
+  --pink:#ffb6d5;
+  --pink-deep:#ff8fbf;
+  --gold:#ffd98e;
+  --lav:#c9b8ff;
+  --cream:#fff6ec;
+  --ink:#4a3b63;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Quicksand',sans-serif;
+  background:linear-gradient(180deg,var(--night-1) 0%,var(--night-2) 45%,var(--night-3) 100%);
+  color:var(--cream);
+  overflow-x:hidden;
+  min-height:100vh;
+}
+::selection{background:var(--pink-deep);color:#fff;}
+
+/* ---------- starry sky canvas ---------- */
+#sky{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+/* ---------- floating hearts ---------- */
+.float-heart{
+  position:fixed;bottom:-40px;z-index:1;pointer-events:none;
+  font-size:18px;opacity:.7;animation:floatUp linear forwards;
+}
+@keyframes floatUp{
+  0%{transform:translateY(0) rotate(0deg);opacity:0;}
+  10%{opacity:.8;}
+  100%{transform:translateY(-110vh) rotate(30deg);opacity:0;}
+}
+
+/* ============ LANDING / ENVELOPE ============ */
+#landing{
+  position:fixed;inset:0;z-index:50;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 50% 30%,#241a55 0%,var(--night-1) 70%);
+  transition:opacity 1.2s ease, visibility 1.2s;
+  padding:20px;text-align:center;
+}
+#landing.hidden{opacity:0;visibility:hidden;}
+.landing-title{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:clamp(1.4rem,4vw,2.4rem);color:var(--lav);
+  margin-bottom:8px;letter-spacing:.5px;
+  animation:softGlow 3s ease-in-out infinite;
+}
+.landing-sub{color:#9d8fd0;font-size:clamp(.85rem,2vw,1.05rem);margin-bottom:48px;}
+@keyframes softGlow{
+  0%,100%{text-shadow:0 0 18px rgba(201,184,255,.35);}
+  50%{text-shadow:0 0 34px rgba(255,182,213,.6);}
+}
+
+/* envelope */
+.envelope{position:relative;width:min(340px,80vw);height:230px;cursor:pointer;transition:transform .4s;}
+.envelope:hover{transform:translateY(-6px) scale(1.02);}
+.env-back{
+  position:absolute;inset:0;border-radius:12px;
+  background:linear-gradient(160deg,#f7dfe9,#eec4da);
+  box-shadow:0 24px 60px rgba(0,0,0,.5), inset 0 0 40px rgba(255,255,255,.35);
+}
+.env-letter{
+  position:absolute;left:6%;right:6%;top:8%;height:78%;
+  background:var(--cream);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Caveat',cursive;color:var(--ink);font-size:1.35rem;
+  transition:transform .8s cubic-bezier(.2,.8,.3,1) .15s;
+  box-shadow:0 4px 14px rgba(0,0,0,.18);padding:10px;
+}
+.envelope.open .env-letter{transform:translateY(-72%);}
+.env-front{
+  position:absolute;inset:0;border-radius:12px;pointer-events:none;
+  background:linear-gradient(200deg,#ffd9e8 0%,#f9bcd6 100%);
+  clip-path:polygon(0 32%,50% 62%,100% 32%,100% 100%,0 100%);
+  box-shadow:inset 0 -6px 20px rgba(214,120,160,.35);
+}
+.env-flap{
+  position:absolute;left:0;right:0;top:0;height:52%;
+  background:linear-gradient(180deg,#f9c6dd,#f2a9ca);
+  clip-path:polygon(0 0,100% 0,50% 100%);
+  transform-origin:top;border-radius:12px 12px 0 0;
+  transition:transform .7s cubic-bezier(.6,0,.3,1);
+  z-index:3;
+}
+.envelope.open .env-flap{transform:rotateX(180deg);z-index:1;}
+.wax-seal{
+  position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);
+  width:64px;height:64px;border-radius:50%;z-index:4;
+  background:radial-gradient(circle at 35% 30%,#ff9ec6,#e25a97 60%,#c23d7d);
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;color:#fff;font-family:'Caveat',cursive;
+  box-shadow:0 4px 12px rgba(0,0,0,.35), inset 0 2px 6px rgba(255,255,255,.4);
+  transition:opacity .4s, transform .4s;
+}
+.envelope.open .wax-seal{opacity:0;transform:translate(-50%,-50%) scale(.4) rotate(40deg);}
+.open-hint{
+  margin-top:42px;color:var(--gold);font-weight:600;letter-spacing:1px;
+  font-size:.95rem;animation:pulseHint 1.8s ease-in-out infinite;
+}
+@keyframes pulseHint{0%,100%{opacity:.55;}50%{opacity:1;}}
+
+/* ============ MAIN CONTENT ============ */
+#main{position:relative;z-index:2;opacity:0;transition:opacity 1.4s ease .3s;}
+#main.visible{opacity:1;}
+
+section{
+  max-width:860px;margin:0 auto;padding:110px 22px 60px;
+  position:relative;
+}
+.sec-head{text-align:center;margin-bottom:44px;}
+.sec-emoji{font-size:2.6rem;display:block;margin-bottom:10px;filter:drop-shadow(0 0 14px rgba(255,182,213,.6));}
+.sec-title{
+  font-family:'Playfair Display',serif;font-size:clamp(1.6rem,4.5vw,2.4rem);
+  color:var(--cream);
+}
+.sec-line{
+  width:70px;height:3px;margin:16px auto 0;border-radius:3px;
+  background:linear-gradient(90deg,var(--pink),var(--lav));
+}
+
+/* reveal on scroll */
+.reveal{opacity:0;transform:translateY(34px);transition:opacity .9s ease,transform .9s ease;}
+.reveal.shown{opacity:1;transform:none;}
+
+/* ---------- letter ---------- */
+.letter-paper{
+  background:linear-gradient(175deg,#fff9f1,#ffeef5);
+  color:var(--ink);border-radius:18px;padding:clamp(28px,6vw,56px);
+  box-shadow:0 24px 70px rgba(0,0,0,.45), inset 0 0 60px rgba(255,214,230,.4);
+  position:relative;line-height:1.9;font-size:1.02rem;
+}
+.letter-paper::before{
+  content:"";position:absolute;inset:12px;border:1.5px dashed rgba(226,90,151,.35);
+  border-radius:12px;pointer-events:none;
+}
+.letter-paper p{margin-bottom:1.15em;}
+.letter-paper .salutation{font-family:'Caveat',cursive;font-size:1.9rem;color:#d14d8b;margin-bottom:.6em;}
+.letter-paper .signature{font-family:'Caveat',cursive;font-size:1.7rem;color:#d14d8b;text-align:right;margin-top:1.2em;}
+
+/* ---------- love cards ---------- */
+.love-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;}
+.love-card{
+  background:rgba(255,255,255,.06);border:1px solid rgba(201,184,255,.25);
+  border-radius:16px;padding:26px 22px;backdrop-filter:blur(8px);
+  transition:transform .35s, box-shadow .35s, border-color .35s;
+}
+.love-card:hover{
+  transform:translateY(-8px) rotate(-1deg);
+  box-shadow:0 18px 40px rgba(255,143,191,.22);
+  border-color:var(--pink);
+}
+.love-card .lc-emoji{font-size:1.9rem;}
+.love-card h3{color:var(--pink);margin:12px 0 8px;font-size:1.08rem;}
+.love-card p{color:#cfc6ee;font-size:.92rem;line-height:1.65;}
+
+/* ---------- timeline ---------- */
+.timeline{position:relative;padding-left:34px;}
+.timeline::before{
+  content:"";position:absolute;left:10px;top:6px;bottom:6px;width:2px;
+  background:linear-gradient(180deg,var(--pink),var(--lav),var(--gold));
+  border-radius:2px;
+}
+.t-item{position:relative;margin-bottom:34px;}
+.t-item::before{
+  content:"✦";position:absolute;left:-33px;top:2px;color:var(--gold);
+  font-size:1.1rem;text-shadow:0 0 12px var(--gold);
+}
+.t-date{
+  display:inline-block;background:rgba(255,182,213,.15);color:var(--pink);
+  font-size:.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:4px 12px;border-radius:999px;margin-bottom:8px;
+}
+.t-item h3{font-size:1.1rem;margin-bottom:6px;color:var(--cream);}
+.t-item p{color:#c5bbe8;font-size:.93rem;line-height:1.7;}
+
+/* ---------- forget ---------- */
+.forget-grid{display:grid;gap:16px;}
+.forget-msg{
+  display:flex;gap:16px;align-items:flex-start;
+  background:rgba(201,184,255,.08);border-left:4px solid var(--lav);
+  border-radius:0 14px 14px 0;padding:20px 22px;
+  color:#e6defc;line-height:1.7;font-size:.97rem;
+  transition:.3s;
+}
+.forget-msg:hover{background:rgba(201,184,255,.15);transform:translateX(6px);}
+.forget-msg .fm-emoji{font-size:1.5rem;flex-shrink:0;}
+
+/* ---------- songs ---------- */
+.song-list{display:grid;gap:14px;}
+.song{
+  display:flex;align-items:center;gap:16px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,217,142,.2);
+  border-radius:14px;padding:16px 20px;transition:.3s;text-decoration:none;color:inherit;
+}
+.song:hover{border-color:var(--gold);background:rgba(255,217,142,.08);transform:scale(1.015);}
+.song .note{
+  width:44px;height:44px;border-radius:12px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--pink-deep),var(--lav));
+  display:flex;align-items:center;justify-content:center;font-size:1.3rem;
+}
+.song h3{font-size:1rem;color:var(--cream);}
+.song p{font-size:.85rem;color:#b9aede;margin-top:3px;}
+.song .play{margin-left:auto;color:var(--gold);font-size:1.2rem;}
+
+/* ---------- interactive stars ---------- */
+.star-field{
+  position:relative;height:420px;border-radius:22px;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 120%,#33205f 0%,#120c33 70%);
+  border:1px solid rgba(201,184,255,.2);
+}
+.star-field .hint{
+  position:absolute;bottom:14px;width:100%;text-align:center;
+  color:#8f83c4;font-size:.85rem;pointer-events:none;
+}
+.wish-star{
+  position:absolute;background:none;border:none;cursor:pointer;
+  font-size:1.4rem;color:var(--gold);
+  text-shadow:0 0 10px var(--gold),0 0 26px rgba(255,217,142,.6);
+  animation:twinkle 2.4s ease-in-out infinite;
+  transition:transform .3s;
+}
+.wish-star:hover{transform:scale(1.6) rotate(20deg);}
+@keyframes twinkle{0%,100%{opacity:.55;}50%{opacity:1;}}
+.star-toast{
+  position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(20px);
+  background:rgba(30,20,60,.92);border:1px solid var(--gold);color:var(--cream);
+  padding:14px 26px;border-radius:999px;font-family:'Caveat',cursive;font-size:1.3rem;
+  opacity:0;pointer-events:none;transition:.4s;z-index:60;max-width:88vw;text-align:center;
+  box-shadow:0 10px 40px rgba(0,0,0,.5);
+}
+.star-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ---------- open when ---------- */
+.ow-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;}
+.ow-btn{
+  border:1px solid rgba(255,182,213,.35);background:rgba(255,182,213,.07);
+  color:var(--pink);border-radius:16px;padding:24px 16px;cursor:pointer;
+  font-family:'Quicksand',sans-serif;font-weight:600;font-size:.95rem;
+  transition:.3s;line-height:1.5;
+}
+.ow-btn span{display:block;font-size:1.7rem;margin-bottom:8px;}
+.ow-btn:hover{background:rgba(255,182,213,.18);transform:translateY(-5px);box-shadow:0 14px 34px rgba(255,143,191,.25);}
+
+/* modal */
+.modal{
+  position:fixed;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;
+  background:rgba(8,6,26,.7);backdrop-filter:blur(6px);
+  opacity:0;visibility:hidden;transition:.35s;padding:20px;
+}
+.modal.show{opacity:1;visibility:visible;}
+.modal-card{
+  background:linear-gradient(170deg,#fff9f1,#ffeef6);color:var(--ink);
+  max-width:520px;width:100%;border-radius:20px;padding:38px 32px;
+  transform:scale(.85) translateY(20px);transition:.4s cubic-bezier(.2,.9,.3,1.2);
+  box-shadow:0 30px 80px rgba(0,0,0,.6);max-height:80vh;overflow-y:auto;
+}
+.modal.show .modal-card{transform:none;}
+.modal-card h3{font-family:'Caveat',cursive;font-size:1.8rem;color:#d14d8b;margin-bottom:14px;}
+.modal-card p{line-height:1.85;font-size:.98rem;white-space:pre-line;}
+.modal-close{
+  margin-top:22px;background:#e25a97;color:#fff;border:none;border-radius:999px;
+  padding:10px 26px;font-family:'Quicksand',sans-serif;font-weight:700;cursor:pointer;
+  transition:.25s;
+}
+.modal-close:hover{background:#c23d7d;transform:scale(1.05);}
+
+/* ---------- finale ---------- */
+#finale{text-align:center;padding-bottom:140px;}
+.hb-title{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:clamp(2rem,7vw,3.6rem);
+  background:linear-gradient(90deg,var(--pink),var(--gold),var(--lav),var(--pink));
+  background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:shimmer 5s linear infinite;
+}
+@keyframes shimmer{to{background-position:300% 0;}}
+.hb-name{font-family:'Caveat',cursive;font-size:clamp(2.4rem,8vw,4rem);color:var(--pink);margin-top:6px;
+  text-shadow:0 0 30px rgba(255,143,191,.5);}
+.final-note{
+  max-width:560px;margin:48px auto 0;color:#d9d0f5;line-height:2;
+  font-size:1.05rem;
+}
+.final-note .big{font-family:'Caveat',cursive;font-size:1.6rem;color:var(--gold);display:block;margin-top:18px;}
+
+/* cake */
+.cake{position:relative;width:220px;height:210px;margin:60px auto 0;}
+.cake .layer{position:absolute;left:50%;transform:translateX(-50%);border-radius:10px;}
+.cake .l1{bottom:0;width:200px;height:70px;background:linear-gradient(180deg,#ff9ec6,#e87fb0);}
+.cake .l2{bottom:64px;width:150px;height:56px;background:linear-gradient(180deg,#c9b8ff,#a58fe8);}
+.cake .l3{bottom:114px;width:100px;height:46px;background:linear-gradient(180deg,#ffd98e,#f5b95e);}
+.cake .icing{position:absolute;left:50%;transform:translateX(-50%);height:14px;border-radius:8px 8px 12px 12px;background:#fff6ec;}
+.cake .i1{bottom:58px;width:200px;}
+.cake .i2{bottom:110px;width:150px;}
+.cake .i3{bottom:150px;width:100px;}
+.candle{position:absolute;bottom:158px;left:50%;transform:translateX(-50%);width:8px;height:34px;
+  background:repeating-linear-gradient(45deg,#ff8fbf 0 5px,#fff 5px 10px);border-radius:3px;}
+.flame{
+  position:absolute;bottom:190px;left:50%;transform:translateX(-50%);
+  width:14px;height:22px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+  background:radial-gradient(circle at 50% 70%,#fff6c8,#ffcf5e 55%,#ff9a3d);
+  animation:flick .35s ease-in-out infinite alternate;
+  box-shadow:0 0 22px 8px rgba(255,190,90,.55);
+}
+@keyframes flick{from{transform:translateX(-50%) scale(1) rotate(-2deg);}to{transform:translateX(-52%) scale(1.12) rotate(3deg);}}
+#confettiBtn{
+  margin-top:44px;background:linear-gradient(90deg,var(--pink-deep),var(--lav));
+  border:none;color:#fff;font-family:'Quicksand',sans-serif;font-weight:700;font-size:1rem;
+  padding:15px 38px;border-radius:999px;cursor:pointer;transition:.3s;
+  box-shadow:0 12px 34px rgba(255,143,191,.4);
+}
+#confettiBtn:hover{transform:scale(1.07);box-shadow:0 16px 44px rgba(255,143,191,.6);}
+#confettiCanvas{position:fixed;inset:0;pointer-events:none;z-index:80;}
+
+footer{
+  text-align:center;padding:40px 20px 60px;color:#7d72ad;font-size:.85rem;position:relative;z-index:2;
+}
+footer .heart{color:var(--pink-deep);}
+
+@media (max-width:560px){
+  section{padding-top:80px;}
+}
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<canvas id="sky"></canvas>
+
+<!-- ================= LANDING ================= -->
+<div id="landing">
+  <h1 class="landing-title">A little corner of the internet that belongs to you</h1>
+  <p class="landing-sub">someone, somewhere, made this just for you ♡</p>
+  <div class="envelope" id="envelope">
+    <div class="env-back"></div>
+    <div class="env-letter">for hadil,<br>on your day ♡</div>
+    <div class="env-front"></div>
+    <div class="env-flap"></div>
+    <div class="wax-seal">♡</div>
+  </div>
+  <p class="open-hint">✦ &nbsp;Open your birthday gift&nbsp; ✦</p>
+</div>
+
+<!-- ================= MAIN ================= -->
+<main id="main">
+
+  <!-- 💌 LETTER -->
+  <section id="letter" class="reveal">
+    <div class="sec-head">
+      <span class="sec-emoji">💌</span>
+      <h2 class="sec-title">A letter from me</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="letter-paper">
+      <p class="salutation">Dearest Hadil,</p>
+      <p>Happy birthday to you, my beautiful human. ♡</p>
+      <p>I don't really know how to begin this because every time I try to put into words what you mean to me, the words somehow feel too small.</p>
+      <p>It's funny, isn't it? How someone can live so far away, on the other side of a screen, and yet somehow find a way to become such a real and beautiful part of your life.</p>
+      <p>I never expected an online friendship to mean this much to me. I never expected a person I met through a screen to become someone whose presence could make my days softer, my laughs louder, and my heart a little happier.</p>
+      <p>But then there was you. And somehow, little by little, you became one of those people I never want to lose.</p>
+      <p>You are genuinely one of the best people I've ever had the chance to know. And I hope you know that when I say that, I mean it with every part of my heart.</p>
+      <p>I love the way you are you. The way you talk. The way you laugh. The little things you probably don't even realize you do. The way you can make an ordinary conversation feel like something I'll remember. The way your presence can make a bad day feel a little less heavy.</p>
+      <p>There are people who enter our lives like passing seasons. And then there are people who quietly become part of the landscape of our hearts. You're the second kind.</p>
+      <p>You are one of those rare people that I feel incredibly lucky to have found. And if life is really just a collection of tiny coincidences, then meeting you is one of my favorite coincidences ever.</p>
+      <p>I wish I could give you something beautiful today. Something I could wrap in ribbons, put in a box, and hand to you while telling you how much you mean to me. But there's one tiny problem... you're far away. </p>
+      <p>So I thought, okay, if I can't bring the gift to her, maybe I can build one for her. And that's how this little corner of the internet came to exist.</p>
+      <p>It isn't expensive. It isn't wrapped in fancy paper. It probably isn't even the most impressive gift you'll ever receive. But every little part of it was made with you in mind, because I wanted to give you something that says: <strong>I thought about you.</strong> Not just for a few minutes, but enough to sit down and create something that exists because you do.</p>
+      <p>I wanted you to have a little place you can come back to someday and remember that there was someone, somewhere, who was genuinely so happy that you existed. And I hope that whenever life gets overwhelming, whenever you doubt yourself, whenever you feel like you're not doing enough, or whenever the world feels a little too loud... you remember this: you are loved, you are appreciated, you are important, and you make a difference in people's lives simply by being yourself. Including mine.</p>
+      <p>I hope this new year of your life brings you the kind of happiness that doesn't need to be forced. The kind that sneaks up on you while you're doing something ordinary. The kind that makes you stop for a second and think, "wow... I'm really happy."</p>
+      <p>I hope you meet people who appreciate your heart. I hope you accomplish the things you've been quietly wishing for. I hope you have reasons to smile on the days you thought you wouldn't. I hope you discover new places, hear new songs, make ridiculous memories, laugh until your stomach hurts, and experience moments you'll want to keep forever.</p>
+      <p>And when things don't go perfectly, as they never do, I hope you remember that one bad chapter doesn't get to decide the whole story. You still have so many beautiful pages left to write.</p>
+      <p>So here's to another year of you. Another year of your laughter, your dreams, your chaos, your random conversations, your little stories, your beautiful heart, and all the things that make you uniquely you. And selfishly, I hope I get to be there for some of those pages.</p>
+      <p>I hope our friendship keeps growing in all the strange and beautiful ways friendships do. Maybe one day we'll laugh about how ridiculous it is that we started as two people talking through screens. Maybe one day we'll finally meet and realize that after all those messages and calls and conversations, we were even better friends in real life.</p>
+      <p>Until then, I'll happily keep being your friend from my little corner of the world. Because distance might mean I can't knock on your door, it might mean I can't show up with a birthday cake today, it might mean I can't give you a hug today — but it doesn't mean I can't celebrate you. And believe me, I'm celebrating you.</p>
+      <p>May this year be gentle with your heart. May it surprise you with beautiful things. May you become the person you've always wanted to be. And may you never forget how incredibly special you are.</p>
+      <p>Thank you for existing. Thank you for being you. Thank you for becoming my friend, and for making a tiny corner of my world brighter just by being in it.</p>
+      <p>If I could give you one thing today, it wouldn't be money, flowers, or anything wrapped in a box. I'd give you the ability to see yourself through the eyes of the people who love you. Because then you'd finally understand what I see when I look at you: someone incredibly, incredibly worth knowing.</p>
+      <p>Happy birthday, you wonderful human. 🤍 Here's to you. Here's to us. And here's to all the memories we haven't made yet. I hope this is only the beginning. </p>
+      <p class="signature">with so much love,<br>your friend from behind the screen ♡</p>
+    </div>
+  </section>
+
+  <!-- 🌙 THINGS I LOVE ABOUT YOU -->
+  <section id="love" class="reveal">
+    <div class="sec-head">
+      <span class="sec-emoji">🌙</span>
+      <h2 class="sec-title">Things I love about you</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="love-grid">
+      <!-- [EDIT-LOVE] Change the qualities & descriptions below -->
+      <div class="love-card"><div class="lc-emoji">✨</div><h3>Your kindness</h3><p>You care about people in the gentlest, most genuine way — even people you've never met. It's rare and it's beautiful.</p></div>
+      <div class="love-card"><div class="lc-emoji">🌷</div><h3>Your laugh</h3><p>Even through a screen, your joy is contagious. You make ordinary days feel like something worth remembering.</p></div>
+      <div class="love-card"><div class="lc-emoji">🌙</div><h3>Your late-night talks</h3><p>The way conversations with you stretch past midnight and still feel too short. Time behaves differently with you.</p></div>
+      <div class="love-card"><div class="lc-emoji">💫</div><h3>Your strength</h3><p>You carry so much and still show up soft. You don't even realize how brave you are — but I do.</p></div>
+      <div class="love-card"><div class="lc-emoji">📌</div><h3>Your shared taste</h3><p>How we can send each other the same kind of posts before either of us even says a word — you just get it, and get me.</p></div>
+      <div class="love-card"><div class="lc-emoji">🫶</div><h3>Just… you</h3><p>Every weird, wonderful, warm little piece of you. The internet is full of people, and somehow I got lucky enough to find you.</p></div>
+    </div>
+  </section>
+
+  <!-- 🪐 TIMELINE -->
+  <section id="timeline" class="reveal">
+    <div class="sec-head">
+      <span class="sec-emoji">🪐</span>
+      <h2 class="sec-title">Our friendship timeline</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="timeline">
+      <!-- [EDIT-TIMELINE] Replace with your real moments/dates -->
+      <div class="t-item"><span class="t-date">The beginning</span><h3>We found each other on Instagram</h3><p>Somewhere between a post, a comment, and a "wait, you like this too?" — that's how it started. Just two accounts that happened to cross paths.</p></div>
+      <div class="t-item"><span class="t-date">Soon after</span><h3>We realized we liked all the same things</h3><p>Same posts, same interests, same weird niche corners of the internet. It felt less like coincidence and more like the algorithm finally did something right.</p></div>
+      <div class="t-item"><span class="t-date">Not long after that</span><h3>DMs turned into actual conversations</h3><p>What started as sending each other reels turned into real talks — about everything and nothing, at all hours.</p></div>
+      <div class="t-item"><span class="t-date">Somewhere along the way</span><h3>"Online friend" stopped being the right word</h3><p>Somewhere between the long messages and the inside jokes, this stopped feeling like an internet friendship and just started feeling like friendship.</p></div>
+      <div class="t-item"><span class="t-date">Today</span><h3>Your birthday</h3><p>And now here we are — me building you a tiny universe, you reading this. Chapter one of many, many more.</p></div>
+    </div>
+  </section>
+
+  <!-- 🎀 IF YOU EVER FORGET -->
+  <section id="forget" class="reveal">
+    <div class="sec-head">
+      <span class="sec-emoji">🎀</span>
+      <h2 class="sec-title">If you ever forget…</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="forget-grid">
+      <!-- [EDIT-FORGET] -->
+      <div class="forget-msg"><span class="fm-emoji">🌧️</span><p>If you ever feel alone, remember: someone across the screen is always, always rooting for you.</p></div>
+      <div class="forget-msg"><span class="fm-emoji">🌊</span><p>If you ever feel like you're too much, remember: you are exactly enough. You always have been.</p></div>
+      <div class="forget-msg"><span class="fm-emoji">🌑</span><p>If the world feels heavy, remember: you've survived every bad day so far, and I've watched you do it beautifully.</p></div>
+      <div class="forget-msg"><span class="fm-emoji">⭐</span><p>If you ever doubt that you matter, remember: you changed someone's whole world just by being in it. Mine.</p></div>
+    </div>
+  </section>
+
+  <!-- 🎧 SOUNDTRACK -->
+  <section id="songs" class="reveal">
+    <div class="sec-head">
+      <span class="sec-emoji">🎧</span>
+      <h2 class="sec-title">Our soundtrack</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="song-list">
+      <!-- [EDIT-SONGS] Feel free to rename each song and rewrite the reason -->
+      <a class="song" href="https://youtu.be/2W5aNN6_DSg?si=KSPOKRvdvQ4r__nN" target="_blank">
+        <div class="note">🎵</div><div><h3>Song One</h3><p>Because this is the one that always makes me think of you.</p></div><span class="play">▶</span>
+      </a>
+      <a class="song" href="https://youtu.be/osuoqNILLXo?si=XDymiTl8euggXFU4" target="_blank">
+        <div class="note">🎶</div><div><h3>Song Two</h3><p>The one we'd scream-sing together if we ever shared a car ride.</p></div><span class="play">▶</span>
+      </a>
+      <a class="song" href="https://youtu.be/lm3t3myPspk?si=rD9dtPYyxjMXKBh-" target="_blank">
+        <div class="note">🎼</div><div><h3>Song Three</h3><p>For the late-night talks. You know why.</p></div><span class="play">▶</span>
+      </a>
+      <a class="song" href="https://youtu.be/r1XE8ON8fos?si=MgJPF6qdbo00eAJK" target="_blank">
+        <div class="note">💿</div><div><h3>Song Four</h3><p>This one is just… us. No explanation needed.</p></div><span class="play">▶</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- 🌌 SKY FULL OF STARS -->
+  <section id="stars" class="reveal">
+    <div class="sec-head">
+      <span class="sec-emoji">🌌</span>
+      <h2 class="sec-title">A sky full of stars</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="star-field" id="starField">
+      <p class="hint">every star holds a tiny secret — click them ♡</p>
+    </div>
+  </section>
+
+  <!-- 🫶 OPEN WHEN -->
+  <section id="openwhen" class="reveal">
+    <div class="sec-head">
+      <span class="sec-emoji">🫶</span>
+      <h2 class="sec-title">Open when…</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="ow-grid" id="owGrid">
+      <button class="ow-btn" data-key="sad"><span>🌧️</span>Open when you're sad</button>
+      <button class="ow-btn" data-key="miss"><span>🌙</span>Open when you miss me</button>
+      <button class="ow-btn" data-key="motivation"><span>🔥</span>Open when you need motivation</button>
+      <button class="ow-btn" data-key="sleep"><span>😴</span>Open when you can't sleep</button>
+      <button class="ow-btn" data-key="doubt"><span>💭</span>Open when you doubt yourself</button>
+      <button class="ow-btn" data-key="happy"><span>🎉</span>Open when you're happy</button>
+    </div>
+  </section>
+
+  <!-- 🎂 FINALE -->
+  <section id="finale" class="reveal">
+    <div class="sec-head"><span class="sec-emoji">🎂</span></div>
+    <h2 class="hb-title">Happy Birthday,</h2>
+    <div class="hb-name">hadil ♡</div>
+
+    <div class="cake">
+      <div class="layer l1"></div><div class="layer l2"></div><div class="layer l3"></div>
+      <div class="icing i1"></div><div class="icing i2"></div><div class="icing i3"></div>
+      <div class="candle"></div><div class="flame"></div>
+    </div>
+
+    <button id="confettiBtn">🎉 Release the confetti 🎉</button>
+
+    <p class="final-note">
+      I couldn't send you a physical gift, so I built you a little place on the internet instead.
+      <span class="big">Because somehow, the internet gave me you. ♡</span>
+    </p>
+  </section>
+
+  <footer>made with way too much love <span class="heart">♡</span> for hadil — this corner of the internet is yours, forever</footer>
+</main>
+
+<!-- modal + toast + confetti -->
+<div class="modal" id="modal"><div class="modal-card">
+  <h3 id="modalTitle"></h3><p id="modalText"></p>
+  <button class="modal-close" id="modalClose">close ♡</button>
+</div></div>
+<div class="star-toast" id="starToast"></div>
+<canvas id="confettiCanvas"></canvas>
+
+<script>
+/* ==================== NIGHT SKY BACKGROUND ==================== */
+const sky = document.getElementById('sky'), sctx = sky.getContext('2d');
+let stars = [];
+function sizeSky(){ sky.width = innerWidth; sky.height = innerHeight;
+  stars = Array.from({length: 160}, () => ({
+    x: Math.random()*sky.width, y: Math.random()*sky.height,
+    r: Math.random()*1.4 + .3, p: Math.random()*Math.PI*2, s: .008 + Math.random()*.02
+  }));
+}
+sizeSky(); addEventListener('resize', sizeSky);
+(function drawSky(){
+  sctx.clearRect(0,0,sky.width,sky.height);
+  for(const st of stars){
+    st.p += st.s;
+    const a = .35 + Math.abs(Math.sin(st.p))*.65;
+    sctx.beginPath(); sctx.arc(st.x, st.y, st.r, 0, 7);
+    sctx.fillStyle = `rgba(255,246,236,${a})`; sctx.fill();
+  }
+  requestAnimationFrame(drawSky);
+})();
+
+/* floating hearts */
+const heartChars = ['♡','✦','❀','✧'];
+setInterval(() => {
+  if(document.getElementById('landing').classList.contains('hidden') === false) return;
+  const h = document.createElement('span');
+  h.className = 'float-heart';
+  h.textContent = heartChars[Math.floor(Math.random()*heartChars.length)];
+  h.style.left = Math.random()*100 + 'vw';
+  h.style.color = ['#ffb6d5','#c9b8ff','#ffd98e'][Math.floor(Math.random()*3)];
+  h.style.animationDuration = (7 + Math.random()*6) + 's';
+  h.style.fontSize = (12 + Math.random()*14) + 'px';
+  document.body.appendChild(h);
+  setTimeout(() => h.remove(), 13000);
+}, 1400);
+
+/* ==================== ENVELOPE OPEN ==================== */
+const envelope = document.getElementById('envelope');
+envelope.addEventListener('click', () => {
+  envelope.classList.add('open');
+  document.querySelector('.open-hint').style.opacity = 0;
+  setTimeout(() => {
+    document.getElementById('landing').classList.add('hidden');
+    document.getElementById('main').classList.add('visible');
+    burstConfetti(90);
+  }, 1100);
+});
+
+/* ==================== SCROLL REVEAL ==================== */
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if(e.isIntersecting){ e.target.classList.add('shown'); io.unobserve(e.target); }
+}), {threshold:.12});
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* ==================== CLICKABLE STARS ==================== */
+/* [EDIT-STARS] — change these tiny messages */
+const starMessages = [
+  "you are someone's favorite notification ♡",
+  "the moon saw you today and got jealous",
+  "somewhere, a star was named after your laugh",
+  "you make the internet a softer place",
+  "i'd find you in every timeline",
+  "your existence is a plot twist i'm grateful for",
+  "sending you the biggest hug through this pixel",
+  "you + me = the best accidental friendship ever",
+  "this star grants you one wish. use it well ✦",
+  "proof that magic is real: we found each other",
+  "you are so loved it's honestly unfair to others",
+  "keep shining. the sky suits you."
+];
+const field = document.getElementById('starField');
+const toast = document.getElementById('starToast');
+let toastTimer;
+starMessages.forEach((msg, i) => {
+  const b = document.createElement('button');
+  b.className = 'wish-star'; b.textContent = '✦';
+  b.style.left = (6 + Math.random()*86) + '%';
+  b.style.top = (6 + Math.random()*72) + '%';
+  b.style.animationDelay = (Math.random()*2.4) + 's';
+  b.style.fontSize = (1 + Math.random()*1.1) + 'rem';
+  b.addEventListener('click', () => {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
+  });
+  field.appendChild(b);
+});
+
+/* ==================== OPEN WHEN... ==================== */
+/* [EDIT-OPENWHEN] — write your real letters here */
+const openWhen = {
+  sad: { title: "open when you're sad 🌧️",
+    text: "Hey you. Yes, you — the one crying or almost crying or pretending not to.\n\nWhatever happened today, it doesn't get to define you. You are allowed to feel everything you're feeling, and you are also going to be okay. Both are true.\n\nI wish I could teleport with snacks and a blanket. Since I can't: drink some water, wrap yourself in something soft, and remember that I'm one message away. Always.\n\nI love you. The sad will pass. I won't." },
+  miss: { title: "open when you miss me 🌙",
+    text: "If you're reading this, it means the distance won for a moment — but only for a moment.\n\nClose your eyes. Imagine me doing something ridiculous just to make you laugh, because that's exactly what I'd be doing.\n\nI'm in your pocket, in your playlists, in every inside joke nobody else understands. You literally carry me around all day. Missing me is just your heart reminding you that I'm yours.\n\nText me. Right now. I mean it." },
+  motivation: { title: "open when you need motivation 🔥",
+    text: "Listen to me very carefully:\n\nYou have done hard things before. You have surprised yourself before. The version of you from a year ago would be stunned by who you are today.\n\nSo stand up. Stretch. Do the scary thing badly if you must — done badly beats not done at all.\n\nI believe in you so much it's honestly embarrassing. Now go be brilliant. I'll be here, clapping." },
+  sleep: { title: "open when you can't sleep 😴",
+    text: "Hi, insomniac. Welcome to the club, I'm the president.\n\nPut the phone on your chest for a second. Breathe in for four, hold for four, out for six. Again.\n\nThe day is done. You did enough. Whatever is left can wait for morning-you; she's capable and she's got this.\n\nImagine the stars outside are the ones from our page. I'm awake somewhere under the same sky, thinking of you. Goodnight, Hadil. Dream of something soft." },
+  doubt: { title: "open when you doubt yourself 💭",
+    text: "Ah, so the mean voice in your head is talking again. Tell it I said hi, and that it's wrong.\n\nHere are facts, not opinions: you are kind, you are clever, you are funny in a way that can't be taught, and you make people's lives better just by existing in them. I've done the research. Extensively.\n\nDoubt is just fear wearing a lab coat. Don't let it run the experiment.\n\nYou've got this. And on the days you don't — you've got me." },
+  happy: { title: "open when you're happy 🎉",
+    text: "YOU'RE HAPPY!! That's my favorite news in the entire world.\n\nWhatever it is — big win, small joy, random good mood — I hope you're smiling so hard your cheeks hurt. Save this feeling. Bottle it. Tell me everything, in excruciating detail, with voice notes.\n\nYour happiness is genuinely one of my favorite things about existing at the same time as you.\n\nDance a little. You deserve every drop of this. ♡" }
+};
+const modal = document.getElementById('modal');
+document.getElementById('owGrid').addEventListener('click', e => {
+  const btn = e.target.closest('.ow-btn'); if(!btn) return;
+  const d = openWhen[btn.dataset.key];
+  document.getElementById('modalTitle').textContent = d.title;
+  document.getElementById('modalText').textContent = d.text;
+  modal.classList.add('show');
+});
+document.getElementById('modalClose').addEventListener('click', () => modal.classList.remove('show'));
+modal.addEventListener('click', e => { if(e.target === modal) modal.classList.remove('show'); });
+
+/* ==================== CONFETTI ==================== */
+const cCanvas = document.getElementById('confettiCanvas'), cctx = cCanvas.getContext('2d');
+let pieces = [], confettiRunning = false;
+function sizeConfetti(){ cCanvas.width = innerWidth; cCanvas.height = innerHeight; }
+sizeConfetti(); addEventListener('resize', sizeConfetti);
+const confettiColors = ['#ffb6d5','#ff8fbf','#c9b8ff','#ffd98e','#fff6ec','#9be7d8'];
+function burstConfetti(n = 140){
+  for(let i = 0; i < n; i++){
+    pieces.push({
+      x: Math.random()*cCanvas.width, y: -20 - Math.random()*cCanvas.height*.4,
+      w: 6 + Math.random()*8, h: 8 + Math.random()*10,
+      vy: 2 + Math.random()*3.5, vx: -1.5 + Math.random()*3,
+      rot: Math.random()*Math.PI*2, vr: -.1 + Math.random()*.2,
+      color: confettiColors[Math.floor(Math.random()*confettiColors.length)],
+      shape: Math.random() < .3 ? 'circle' : 'rect'
+    });
+  }
+  if(!confettiRunning){ confettiRunning = true; tickConfetti(); }
+}
+function tickConfetti(){
+  cctx.clearRect(0,0,cCanvas.width,cCanvas.height);
+  pieces = pieces.filter(p => p.y < cCanvas.height + 40);
+  for(const p of pieces){
+    p.y += p.vy; p.x += p.vx + Math.sin(p.y*.02); p.rot += p.vr;
+    cctx.save(); cctx.translate(p.x, p.y); cctx.rotate(p.rot); cctx.fillStyle = p.color;
+    if(p.shape === 'circle'){ cctx.beginPath(); cctx.arc(0,0,p.w/2,0,7); cctx.fill(); }
+    else cctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+    cctx.restore();
+  }
+  if(pieces.length) requestAnimationFrame(tickConfetti);
+  else { confettiRunning = false; cctx.clearRect(0,0,cCanvas.width,cCanvas.height); }
+}
+document.getElementById('confettiBtn').addEventListener('click', () => burstConfetti(220));
+</script>
+</body>
+</html>
